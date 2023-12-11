@@ -1,0 +1,103 @@
+import React, { useState } from "react";
+
+// Interface Props Image
+interface ImageProps {
+    src: string;
+    alt: string;
+    className?: string; //nama class CSS tambahan (optional)
+}
+
+// Mendefinisikan komponen RoundedImage sebagai arrow function component
+const RoundedImage = ({ src, alt, className = "" }: ImageProps) => {
+    return (
+        <img
+            src={src}
+            alt={alt}
+            className={` cursor-pointer rounded-full bg-blue-200 ${className}`}
+        />
+    )
+}
+
+// Dropdown
+// mendeskripsikan struktur data item dropdown
+interface DropdownItem {
+    icon: string;
+    label: string;
+}
+
+// Mendefinisikan interface DropdownProps berupa item array
+interface DropdownProps {
+    items: DropdownItem[];
+}
+
+// Mengimplementasikan komponen Dropdown as React Function Component 
+const Dropdown: React.FC<DropdownProps> = ({ items }) => {
+    const [open, setOpen] = useState(false); //mengontrol visibility dropdown dengan state open
+    return (
+        <div className="relative">
+            <button className="flex items-center space-x-2" onClick={() => setOpen(!open)}>
+                <img src="./angle-small-down.png" className="h-5 w-5" alt="" />
+            </button>
+            <div className={`${open ? 'block' : 'hidden'} absolute top-full right-0 w-48 py-2 mt-5 bg-white border rounded shadow-lg`}>
+                {items.map(item => ( //Mapping array items
+                    <a key={item.label} className="flex items-center space-x-2 px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                        <img src={item.icon} className="w-5 h-5" alt="" />
+                        <span>
+                            {item.label}
+                        </span>
+                    </a>
+
+                ))}
+            </div>
+        </div>
+    )
+}
+
+// Data
+const accountItem: DropdownItem = {
+    icon: 'user.png',
+    label: 'My Account'
+
+};
+
+const inboxItem: DropdownItem = {
+    icon: 'sign-out-alt.png',
+    label: 'Logout'
+
+};
+
+const Topnav = () => {
+    return (
+        <header className="flex flex-wrap justify-between py-4 px-6 bg-gray-50 text-gray-500">
+            <div className=" pl-60">
+                <input type="text" className="w-full rounded-md px-6 pr-96 py-1  focus:outline-none bg-gray-100" placeholder="Type to search... " />
+
+                <button className=" absolute px-2 py-2 rounded-md bg-gray-200 ml-2 ">
+                    <img src="./search.png" className="w-4 h-4" alt="" />
+                </button>
+            </div>
+            <div className="flex items-center ">
+                <RoundedImage
+                    src="./profil.png"
+                    alt="Avatar"
+                    className="w-8 h-8 "
+                />
+                <div className="ml-3 mr-4 cursor-pointer">
+                    <h2 className=" text-base">Your name</h2>
+                    <h2 className=" text-xs text-gray-400">Your Position</h2>
+                </div>
+                <div className="">
+                    <Dropdown
+                        items={[accountItem, inboxItem /*...*/]}
+                    />
+                </div>
+
+
+                {/* <NotificationIcon /> */}
+
+            </div>
+        </header >
+
+    );
+}
+export default Topnav;
